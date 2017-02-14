@@ -208,6 +208,7 @@ while spl
         [Rgs,spltf(i),nnRgs] = split(Rgs,Re,Params,coord,splRgs(i),nst,prc);
         nRgs = nRgs + nnRgs;
     end;
+    disp([ntospl, sum(spltf)]); %KD
     if sum(spltf) == 0
         spl = false;
     end;
@@ -222,6 +223,7 @@ end;
         Rgstd(:,i) = std(RgParams,0,2);
         nv = length(Rgv);
         spp = sum(coord(:,Rgv),2)/nv;
+        spp = round(spp,6); % KD
         [~,loc] = min(sum(abs(coord(:,Rgv) - kron(ones(1,nv),spp)),1));
         Rgseed(i) = Rgv(loc);
     end;
@@ -241,6 +243,7 @@ else
     Rvts = find(Rgs == Rnum);
     nv = length(Rvts);
     spp = sum(coord(:,Rvts),2)/nv;
+    spp = round(spp,6); % KD
     nR = max(Rgs);
     for i=1:nv
         if (coord(1,Rvts(i)) <= spp(1)) && (coord(2,Rvts(i)) <= spp(2))
