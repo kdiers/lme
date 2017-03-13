@@ -69,7 +69,8 @@ end;
 W = zeros(n,max(ni));
 SIGMA = W;
 %Starting values
-mTheta0 = mean(Theta0,2);
+%mTheta0 = mean(Theta0,2);
+mTheta0 = round(mean(Theta0,2),10); % KD
 D = zeros(qsq,1);
 D(ind(1:end-2)) = mTheta0(1:end-1);
 D = reshape(D,q,q);
@@ -161,6 +162,7 @@ while tf
         invEI = Vtemp*diag(1./max(diag(Dtemp),1e-5))*Vtemp';
     end
     theta(ind) = theta(ind) + invEI*gr;
+    theta=round(theta,10); % KD
     gnorm = norm(gr);
     lr(it) = lreml;
     
