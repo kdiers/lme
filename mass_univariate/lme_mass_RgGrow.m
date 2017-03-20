@@ -98,7 +98,6 @@ while (growing_ns > 0)
     display([num2str(growing_ns) ' seeds for growing']);
     display(['Current maximum region size ' num2str(max(Rgvtxs_lastind)) ' vertices']);
     while (i <= growing_ns)
-        
         Rgvtxs_prvtxind(Rgind(i)) = Rgvtxs_prvtxind(Rgind(i)) + 1;
         prvtx = Rgvtxs(Rgind(i),Rgvtxs_prvtxind(Rgind(i)));
         RgParams = Params(:,Rgvtxs(Rgind(i),1:Rgvtxs_lastind(Rgind(i))));
@@ -125,8 +124,6 @@ while (growing_ns > 0)
                 sum(sum(DistNewRgParams <= kron(ones(1,nRgnv),thr(:,Rgind(i))),1) == np) >= prc*(nRgnv)/100
             %In addition the vertex's residuals must be correlated above 0.5
             %with any other vertex's residual in the region.
-            
-            
             %if min(min(corrcoef([Re(:,Rgvtxs(Rgind(i),1:Rgvtxs_lastind(Rgind(i)))),Re(:,adjvtxs(loc))]))) >= 0.5
             tmp=corrcoef([Re(:,Rgvtxs(Rgind(i),1:Rgvtxs_lastind(Rgind(i)))),Re(:,adjvtxs(loc))]); % KD
             if not(any(any(isnan(tmp)))) && min(min(tmp))>=0.5 % KD
@@ -137,7 +134,7 @@ while (growing_ns > 0)
                 RgParams = Params(:,Rgvtxs(Rgind(i),1:Rgvtxs_lastind(Rgind(i))));
                 mRgParams = mean(RgParams,2);
             end;
-            clear tmp;
+            clear tmp; % KD
             adjvtxs = [adjvtxs(1:loc-1),adjvtxs(loc+1:end)];
             [~,loc] = min(sum(abs(Params(:,adjvtxs) - kron(ones(1,length(adjvtxs)),mRgParams)),1));
             NewRgParams = [RgParams Params(:,adjvtxs(loc))];
@@ -146,7 +143,6 @@ while (growing_ns > 0)
             DistNewRgParams = abs(NewRgParams-kron(ones(1,nRgnv),mNewRgParams));
             j = j + 1;
         end;
-        tmpp(i,:)=[Rgvtxs_prvtxind(Rgind(i)),Rgvtxs_lastind(Rgind(i)),Rgvtxs_lastind(Rgind(i)),maxRgsz]; % KD
         if (Rgvtxs_prvtxind(Rgind(i)) == Rgvtxs_lastind(Rgind(i))) || (Rgvtxs_lastind(Rgind(i)) == maxRgsz)
             Rgind = [Rgind(1:i-1) Rgind(i+1:end)];
             growing_ns = growing_ns - 1;
@@ -167,7 +163,6 @@ display([num2str(nni) ' holes (unassigned vertices). Trying to form new'...
         ' regions among them or add them to their most similar adjacent'...
         ' region ...']);
 for i=1:nni
-    
     hadjvtxs = Adj(notInclv(i),Adj(notInclv(i),:) > 0);
     if ~isempty(hadjvtxs)
         closestdistRParams = sum(abs(Params(:,notInclv(i)) - mean(Params(:,Rgs == Rgs(hadjvtxs(1))),2)));
@@ -216,7 +211,6 @@ while spl
         [Rgs,spltf(i),nnRgs] = split(Rgs,Re,Params,coord,splRgs(i),nst,prc);
         nRgs = nRgs + nnRgs;
     end;
-    disp([ntospl, sum(spltf)]); %KD
     if sum(spltf) == 0
         spl = false;
     end;
