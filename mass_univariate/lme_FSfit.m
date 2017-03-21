@@ -69,7 +69,9 @@ lr = zeros(1,nit);
 
 %Starting values
 [D,phisq] = lme_fit_init(X,Zcols,y,ni);
-L = chol(D);
+D=round(D,6,'significant'); % KD
+phisq=round(phisq,6,'significant'); % KD
+L = round(chol(D),6,'significant'); % KD
 phi = sqrt(phisq);
 theta = [vec(L);phi];
 
@@ -109,7 +111,8 @@ while tf
     gr = lme_Gradient(X,Zcols,W,invH,L,phi,r,ni);
     [EI,Pth,Qthth] = lme_EI(X,Zcols,W,invH,SIGMA,L,phi,ni);
     invEI = EI\eye(nth);
-    theta(ind) = theta(ind) + invEI*gr;
+    %theta(ind) = theta(ind) + invEI*gr;
+    theta(ind) = theta(ind) + round(invEI*gr,6,'significant'); %KD
     eps = norm(gr);
     lr(it) = lreml;
 
